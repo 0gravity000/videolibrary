@@ -42,8 +42,20 @@ class VideoController extends Controller
                 $tmp = $node->filter('p')->text();
                 return $tmp;
             });
-        }
 
+            //DBに登録
+            foreach ($titles[$idx-1] as $title) {
+                if (Video::where('title', $title)->doesntExist()) {
+                    $video = new Video;
+                    $video->title = $title;
+                    $video->season = $seasons[$idx-1][0];
+                    $video->year = $years[$idx-1][0];
+                    $video->description = $discribes[$idx-1][0];
+                    $video->save();
+                }
+            }
+        }
+        //dd(Video::all());
 
         /*
         $tag_htmls = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1)')->each(function ($node) {
@@ -82,6 +94,111 @@ class VideoController extends Controller
         説明
         #av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div.lAtJLC > div > div:nth-child(3) > div > p
         */
+        //dd($titles);
+        //dd($seasons);
+        //dd($years);
+        //dd($discribes);
+
+        return view('video_recentlyadd' ,compact('titles','seasons','years','discribes') );
+    }
+
+    public function index_toprated()
+    {
+        //
+        $client = new Client();
+        $url = 'https://www.amazon.co.jp/gp/video/search/ref=atv_cat_auto_v2_top_rated_quest?ie=UTF8&phrase=%E9%AB%98%E8%A9%95%E4%BE%A1%E3%81%95%E3%82%8C%E3%81%9F%E4%BD%9C%E5%93%81&pageId=default&queryToken=eyJ0eXBlIjoicXVlcnkiLCJuYXYiOmZhbHNlLCJwdCI6ImJyb3dzZSIsInBpIjoiZGVmYXVsdCIsInNlYyI6ImNlbnRlciIsInN0eXBlIjoic2VhcmNoIiwicXJ5Ijoibm9kZT0yMzUxNjQ5MDUxJmJibj0yMzUxNjQ5MDUxJmZpZWxkLXJldmlldy1yYXRpbmc9Mjc2MTYyNzA1MSZwX25fd2F5c190b193YXRjaD0zNzQ2MzMwMDUxJnNlYXJjaC1hbGlhcz1pbnN0YW50LXZpZGVvIiwidHh0Ijoi6auY6KmV5L6h44GV44KM44Gf5L2c5ZOBIiwib2Zmc2V0IjowLCJucHNpIjozMH0%3D&queryPageType=browse';
+        $crawler = $client->request('GET', $url);
+        //dd($crawler);
+        //1-20件分のデータはある
+        for ($idx=1; $idx < 21 ; $idx++) { 
+            //タイトル
+            #av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div._1y15Fl.dvui-beardContainer.D0Lu_p.av-grid-beard > div._1N2P-J.mustache._2mxudr > div._2hMXwV > div.vRplU5 > span > a
+
+            $titles[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
+                $tmp = $node->filter('span > a')->text();
+                return $tmp;
+            });
+            //シーズン
+            $seasons[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
+                $tmp = $node->filter('span > span > span:nth-child(1)')->text();
+                return $tmp;
+            });
+            //年
+            $years[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
+                $tmp = $node->filter('span > span > span:nth-child(2)')->text();
+                return $tmp;
+            });
+            //説明
+            $discribes[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
+                $tmp = $node->filter('p')->text();
+                return $tmp;
+            });
+
+            //DBに登録
+            foreach ($titles[$idx-1] as $title) {
+                if (Video::where('title', $title)->doesntExist()) {
+                    $video = new Video;
+                    $video->title = $title;
+                    $video->season = $seasons[$idx-1][0];
+                    $video->year = $years[$idx-1][0];
+                    $video->description = $discribes[$idx-1][0];
+                    $video->save();
+                }
+            }
+        }
+
+        //dd($titles);
+        //dd($seasons);
+        //dd($years);
+        //dd($discribes);
+
+        //高評価の作品　20件?
+
+        return view('video_recentlyadd' ,compact('titles','seasons','years','discribes') );
+    }
+
+    public function index_memberbenefits()
+    {
+        //
+        $client = new Client();
+        $url = 'https://www.amazon.co.jp/gp/video/search/ref=atv_cat_facettext_quest?ie=UTF8&pageId=default&phrase=%E3%83%97%E3%83%A9%E3%82%A4%E3%83%A0%E4%BC%9A%E5%93%A1%E7%89%B9%E5%85%B8&queryToken=eyJ0eXBlIjoicXVlcnkiLCJuYXYiOmZhbHNlLCJwdCI6ImJyb3dzZSIsInBpIjoiZGVmYXVsdCIsInNlYyI6ImNlbnRlciIsInN0eXBlIjoic2VhcmNoIiwicXJ5Ijoic2VhcmNoLWFsaWFzPWluc3RhbnQtdmlkZW8mbm9kZT0yMzUxNjQ5MDUxJmJxPSUyOG5vdCUyMGdlbnJlOiUyN2F2X2dlbnJlX2tpZHMlMjclMjkmcF9uX3dheXNfdG9fd2F0Y2g9Mzc0NjMzMDA1MSIsInR4dCI6IuODl%2BODqeOCpOODoOS8muWToeeJueWFuCIsIm9mZnNldCI6MCwibnBzaSI6MzB9&queryPageType=browse';
+        $crawler = $client->request('GET', $url);
+        //dd($crawler);
+        //1-20件分のデータはある
+        for ($idx=1; $idx < 21 ; $idx++) { 
+            //タイトル
+            $titles[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
+                $tmp = $node->filter('span > a')->text();
+                return $tmp;
+            });
+            //シーズン
+            $seasons[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
+                $tmp = $node->filter('span > span > span:nth-child(1)')->text();
+                return $tmp;
+            });
+            //年
+            $years[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
+                $tmp = $node->filter('span > span > span:nth-child(2)')->text();
+                return $tmp;
+            });
+            //説明
+            $discribes[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
+                $tmp = $node->filter('p')->text();
+                return $tmp;
+            });
+
+            //DBに登録
+            foreach ($titles[$idx-1] as $title) {
+                if (Video::where('title', $title)->doesntExist()) {
+                    $video = new Video;
+                    $video->title = $title;
+                    $video->season = $seasons[$idx-1][0];
+                    $video->year = $years[$idx-1][0];
+                    $video->description = $discribes[$idx-1][0];
+                    $video->save();
+                }
+            }
+        }
         //dd($titles);
         //dd($seasons);
         //dd($years);
