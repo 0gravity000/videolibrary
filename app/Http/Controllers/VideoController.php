@@ -22,16 +22,38 @@ class VideoController extends Controller
         //dd($crawler);
         //1-20件分のデータはある
         for ($idx=1; $idx < 21 ; $idx++) { 
-            $infomations[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
-                return $node->text();
+            //タイトル
+            $titles[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
+                $tmp = $node->filter('span > a')->text();
+                return $tmp;
             });
-            }
+            //シーズン
+            $seasons[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
+                $tmp = $node->filter('span > span > span:nth-child(1)')->text();
+                return $tmp;
+            });
+            //年
+            $years[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
+                $tmp = $node->filter('span > span > span:nth-child(2)')->text();
+                return $tmp;
+            });
+            //説明
+            $discribes[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
+                $tmp = $node->filter('p')->text();
+                return $tmp;
+            });
+        }
+
+
         /*
         $tag_htmls = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1)')->each(function ($node) {
             return $node->text();
         });
         */
-        //dd($infomations);
+        //dd($titles);
+        //dd($seasons);
+        //dd($years);
+        //dd($discribes);
 
         /*
         プライムに最近追加された作品　20件?
@@ -56,9 +78,16 @@ class VideoController extends Controller
         #av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div._1y15Fl.dvui-beardContainer.D0Lu_p.av-grid-beard > div._1N2P-J.mustache._2mxudr > div._2hMXwV > div._27-0OW.dvui-beard-second-line > span > span > span:nth-child(1)
         年：2021
         #av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div._1y15Fl.dvui-beardContainer.D0Lu_p.av-grid-beard > div._1N2P-J.mustache._2mxudr > div._2hMXwV > div._27-0OW.dvui-beard-second-line > span > span > span:nth-child(2)
-        */
 
-        return view('video_recentlyadd' ,compact('infomations') );
+        説明
+        #av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div.lAtJLC > div > div:nth-child(3) > div > p
+        */
+        //dd($titles);
+        //dd($seasons);
+        //dd($years);
+        //dd($discribes);
+
+        return view('video_recentlyadd' ,compact('titles','seasons','years','discribes') );
     }
 
     /**
