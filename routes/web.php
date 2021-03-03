@@ -20,3 +20,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/root', function () {
+    return view('root');
+});
+Route::get('/video/index_recentlyadd', 'VideoController@index_recentlyadd');
