@@ -9,18 +9,12 @@
     </div>
     <div class="row">
         @for ($i = 0; $i < count($titles); $i++)
-        @foreach ($titles[$i] as $title)
-            <h1>{{ $title }}</h1>
-        @endforeach
-        @foreach ($seasons[$i] as $season)
-            {{ $season }}&nbsp;/&nbsp;
-        @endforeach
-        @foreach ($years[$i] as $year)
-            {{ $year }}<br>
-        @endforeach
-        @foreach ($discribes[$i] as $discribe)
-            {{ $discribe }}<br>
-        @endforeach
+        <h1><a href="https://amazon.co.jp{{ $urls[$i][0] }}" target="_blank" rel="noopener noreferrer">
+            {{ $titles[$i][0] }}
+        </a></h1>
+        {{ $seasons[$i][0] }}&nbsp;/&nbsp;
+        {{ $years[$i][0] }}<br>
+        {{ $discribes[$i][0] }}<br>
         @endfor
     </div>
 </div>

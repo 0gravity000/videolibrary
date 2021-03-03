@@ -27,6 +27,11 @@ class VideoController extends Controller
                 $tmp = $node->filter('span > a')->text();
                 return $tmp;
             });
+            //url
+            $urls[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
+                $tmp = $node->filter('span > a')->attr('href');
+                return $tmp;
+            });
             //シーズン
             $seasons[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
                 $tmp = $node->filter('span > span > span:nth-child(1)')->text();
@@ -48,6 +53,7 @@ class VideoController extends Controller
                 if (Video::where('title', $title)->doesntExist()) {
                     $video = new Video;
                     $video->title = $title;
+                    $video->url = $urls[$idx-1][0];
                     $video->season = $seasons[$idx-1][0];
                     $video->year = $years[$idx-1][0];
                     $video->description = $discribes[$idx-1][0];
@@ -99,7 +105,7 @@ class VideoController extends Controller
         //dd($years);
         //dd($discribes);
 
-        return view('video_recentlyadd' ,compact('titles','seasons','years','discribes') );
+        return view('video_recentlyadd' ,compact('titles','urls','seasons','years','discribes') );
     }
 
     public function index_toprated()
@@ -118,6 +124,11 @@ class VideoController extends Controller
                 $tmp = $node->filter('span > a')->text();
                 return $tmp;
             });
+            //url
+            $urls[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
+                $tmp = $node->filter('span > a')->attr('href');
+                return $tmp;
+            });
             //シーズン
             $seasons[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
                 $tmp = $node->filter('span > span > span:nth-child(1)')->text();
@@ -139,6 +150,7 @@ class VideoController extends Controller
                 if (Video::where('title', $title)->doesntExist()) {
                     $video = new Video;
                     $video->title = $title;
+                    $video->url = $urls[$idx-1][0];
                     $video->season = $seasons[$idx-1][0];
                     $video->year = $years[$idx-1][0];
                     $video->description = $discribes[$idx-1][0];
@@ -154,7 +166,7 @@ class VideoController extends Controller
 
         //高評価の作品　20件?
 
-        return view('video_recentlyadd' ,compact('titles','seasons','years','discribes') );
+        return view('video_recentlyadd' ,compact('titles','urls','seasons','years','discribes') );
     }
 
     public function index_memberbenefits()
@@ -171,6 +183,11 @@ class VideoController extends Controller
                 $tmp = $node->filter('span > a')->text();
                 return $tmp;
             });
+            //url
+            $urls[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
+                $tmp = $node->filter('span > a')->attr('href');
+                return $tmp;
+            });
             //シーズン
             $seasons[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
                 $tmp = $node->filter('span > span > span:nth-child(1)')->text();
@@ -192,6 +209,7 @@ class VideoController extends Controller
                 if (Video::where('title', $title)->doesntExist()) {
                     $video = new Video;
                     $video->title = $title;
+                    $video->url = $urls[$idx-1][0];
                     $video->season = $seasons[$idx-1][0];
                     $video->year = $years[$idx-1][0];
                     $video->description = $discribes[$idx-1][0];
@@ -204,7 +222,7 @@ class VideoController extends Controller
         //dd($years);
         //dd($discribes);
 
-        return view('video_recentlyadd' ,compact('titles','seasons','years','discribes') );
+        return view('video_recentlyadd' ,compact('titles','urls','seasons','years','discribes') );
     }
 
     /**
