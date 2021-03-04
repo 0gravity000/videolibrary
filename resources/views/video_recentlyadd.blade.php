@@ -8,14 +8,17 @@
         </div>
     </div>
     <div class="row">
-        @for ($i = 0; $i < count($titles); $i++)
-        <h1><a href="https://amazon.co.jp{{ $urls[$i][0] }}" target="_blank" rel="noopener noreferrer">
-            {{ $titles[$i][0] }}
+        @foreach ($videos as $video)
+        <h1><a href="{{ $video->url }}" target="_blank" rel="noopener noreferrer">
+            {{ $video->title }}
         </a></h1>
-        {{ $seasons[$i][0] }}&nbsp;/&nbsp;
-        {{ $years[$i][0] }}<br>
-        {{ $discribes[$i][0] }}<br>
-        @endfor
+            @foreach ($video->categories as $category)
+            {{ $category->master_category_id }},
+            @endforeach
+        {{ $video->season }}&nbsp;/&nbsp;
+        {{ $video->year }}<br>
+        {{ $video->description }}<br>
+        @endforeach
     </div>
 </div>
 @endsection

@@ -27,3 +27,4 @@ Route::get('/root', function () {
 Route::get('/video/index_recentlyadd', 'VideoController@index_recentlyadd');
 Route::get('/video/index_toprated', 'VideoController@index_toprated');
 Route::get('/video/index_memberbenefits', 'VideoController@index_memberbenefits');
+Route::get('/video/download', 'VideoController@download');
