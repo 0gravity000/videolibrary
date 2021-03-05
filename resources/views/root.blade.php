@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8">
-            <a href="/video/download">ダウンロードとDB登録</a><br>
+            <a href="/video/manual_download">手動ダウンロード（DB登録）</a><br>
             <a href="/video/index">Amazon PrimeVideo で人気作品をチェック</a><br>
             <!--
             <a href="/video/index_toprated">高評価された作品</a><br>
