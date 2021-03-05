@@ -6,6 +6,7 @@ use App\Video;
 use Illuminate\Http\Request;
 use Goutte\Client;
 use App\Category;
+use App\MasterCategory;
 
 class VideoController extends Controller
 {
@@ -181,10 +182,15 @@ class VideoController extends Controller
         //dd($seasons);
         //dd($years);
         //dd($discribes);
-        $videos = Video::all();
-        $categories = Category::all();
+        return redirect('/index');
+    }
 
-        return view('video_recentlyadd' ,compact('videos','categories') );
+    public function index()
+    {
+        $videos = Video::all();
+        $mastercategories = MasterCategory::all();
+
+        return view('video_index' ,compact('videos','mastercategories') );
     }
 
     /**

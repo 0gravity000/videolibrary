@@ -13,11 +13,12 @@
             {{ $video->title }}
         </a></h1>
             @foreach ($video->categories as $category)
-            {{ $category->master_category_id }},
+            {{ $mastercategories->find($category->master_category_id)->name }}&nbsp;/&nbsp;
             @endforeach
-        {{ $video->season }}&nbsp;/&nbsp;
-        {{ $video->year }}<br>
-        {{ $video->description }}<br>
+            <br>
+            {{ $video->season }}&nbsp;/&nbsp;
+            {{ $video->year }}
+            {{ $video->description }}
         @endforeach
     </div>
 </div>
