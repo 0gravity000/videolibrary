@@ -36,3 +36,8 @@ Route::get('/admin/category', 'AdminController@index_category');
 Route::get('/admin/category/create', 'AdminController@create_category');
 Route::get('/admin/category/{id}', 'AdminController@show_category');
 Route::post('/admin/category', 'AdminController@update_category');
+Route::get('/admin/video', 'AdminController@index_video');
+Route::get('/admin/video/create', 'AdminController@create_video');
+Route::get('/admin/video/{id}', 'AdminController@show_video');
+Route::post('/admin/video/update', 'AdminController@update_video');
+Route::post('/admin/video/store', 'AdminController@store_video');
