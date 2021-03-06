@@ -25,11 +25,18 @@
                     <label for="title" class="form-label">タイトル</label>
                     <input type="text" name="title" value="{{ $video->title }}" class="form-control"><br>
                     <p>
-                    カテゴリ：
+                    現在のカテゴリ：
                     @foreach ($video->categories as $category)
                     {{ $mastercategories->find($category->master_category_id)->name }}&nbsp;/&nbsp;
                     @endforeach
                     </p>
+                    <label for="categories" class="form-label">変更後のカテゴリ※複数指定できます</label>
+                    <select name="categories[]" class="form-select form-control" size="7" multiple aria-label="multiple category">
+                        <option value="0" selected>指定なし</option>
+                        @foreach ($mastercategories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
                     <br>
                     <label for="InputSeason" class="form-label">シーズン</label>
                     <input type="text" name="InputSeason" value="{{ $video->season }}" class="form-control"><br>

@@ -89,13 +89,6 @@ class AdminController extends Controller
         //
         //dd($request);
         //バリデーションチェック
-        /*
-        $rules = [
-            'title' => ['unique:videos']
-        ];
-        $this->validate($request, $rules);
-        */
-
         $validatedData = $request->validate([
             'title' => ['unique:videos,title']
         ]);
@@ -109,27 +102,17 @@ class AdminController extends Controller
         $video->url = $request->InputUrl;
         $video->description = $request->InputDescription;
         $video->save();
+        //dd($video);
 
-        /*
         //categoryテーブルに登録
-        if (Category::where('video_id', $video->id)->doesntExist()) {
-            //新規作成 videoidなし
-            $category = new Category;
-            $category->master_category_id = $request->InputCategoryid;
-            $category->video_id = $video->id;
-            $category->save();
-        } else {
-            //新規作成 videoidあり categoryidなし
-            if (Category::where('video_id', $video->id)
-                ->where('master_category_id', $request->InputCategoryid)
-                ->doesntExist()) {
+        if ($request->categories[0] != "0") {
+            for ($idx=0; $idx < count($request->categories) ; $idx++) { 
                 $category = new Category;
-                $category->master_category_id = $request->InputCategoryid;
+                $category->master_category_id = (int)($request->categories[$idx]);
                 $category->video_id = $video->id;
                 $category->save();
             }
         }
-        */
 
         return redirect('/admin/video');
     }
@@ -150,9 +133,10 @@ class AdminController extends Controller
     public function show_video($id)
     {
         $video = Video::where('id', $id)->first();
+        //$categories = Category::where('video_id', $id)->get();
         $mastercategories = MasterCategory::all();
- 
-        return view('admin_video_update', compact('video','mastercategories'));
+        //dd($categories);
+        return view('admin_video_update', compact('video','mastercategories','categories'));
     }
 
     /**
@@ -186,20 +170,6 @@ class AdminController extends Controller
 
     public function update_video(Request $request)
     {
-        //
-        //dd($request);
-        //バリデーションチェック
-        /*
-        $rules = [
-            'title' => ['unique:videos']
-        ];
-        $this->validate($request, $rules);
-        */
-
-        $validatedData = $request->validate([
-            'title' => ['unique:videos,title']
-        ]);
-        //dd($validatedData);
 
         //videoテーブルに登録
         $video = Video::where('id', $request->InputId)->first();
@@ -210,26 +180,23 @@ class AdminController extends Controller
         $video->description = $request->InputDescription;
         $video->save();
 
-        /*
+        //categoryテーブルに登録前に現在のカテゴリのレコードをすべてクリア
+        //dd(Category::where('video_id', $video->id)->get());
+        if (Category::where('video_id', $video->id)->exists()) {
+            //videoidありの場合
+            Category::where('video_id', $video->id)->delete();
+        }
+
         //categoryテーブルに登録
-        if (Category::where('video_id', $video->id)->doesntExist()) {
-            //新規作成 videoidなし
-            $category = new Category;
-            $category->master_category_id = $request->InputCategoryid;
-            $category->video_id = $video->id;
-            $category->save();
-        } else {
-            //新規作成 videoidあり categoryidなし
-            if (Category::where('video_id', $video->id)
-                ->where('master_category_id', $request->InputCategoryid)
-                ->doesntExist()) {
+        if ($request->categories[0] != "0") {
+            //カテゴリ指定ありの場合
+            for ($idx=0; $idx < count($request->categories) ; $idx++) { 
                 $category = new Category;
-                $category->master_category_id = $request->InputCategoryid;
+                $category->master_category_id = (int)($request->categories[$idx]);
                 $category->video_id = $video->id;
                 $category->save();
             }
         }
-        */
 
         return redirect('/admin/video');
     }
