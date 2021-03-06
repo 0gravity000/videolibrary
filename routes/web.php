@@ -29,3 +29,10 @@ Route::get('/video/index_toprated', 'VideoController@index_toprated');
 Route::get('/video/index_memberbenefits', 'VideoController@index_memberbenefits');
 Route::get('/video/manual_download', 'VideoController@manual_download');
 Route::get('/video/index', 'VideoController@index');
+Route::get('/admin', function () {
+    return view('admin');
+});
+Route::get('/admin/category', 'AdminController@index_category');
+Route::get('/admin/category/create', 'AdminController@create_category');
+Route::get('/admin/category/{id}', 'AdminController@show_category');
+Route::post('/admin/category', 'AdminController@update_category');

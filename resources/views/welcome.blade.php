@@ -85,7 +85,7 @@
                 </div>
 
                 <div class="links">
-                    <a href="/root">検索する</a>
+                    <a href="/root">お気に入りの作品をチェック！</a>
                 </div>
             </div>
         </div>
