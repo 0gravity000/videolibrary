@@ -8,7 +8,7 @@
             <hr>
             <a href="/video/manual_download">手動ダウンロード（DB登録）</a><br>
             <a href="/admin/video">手動で作品を登録・編集する</a><br>
-            <a href="/admin/category">カテゴリを登録・編集する</a><br>
+            <a href="/admin/mastercategory">マスターカテゴリを登録・編集する</a><br>
         </div>
     </div>
 </div>

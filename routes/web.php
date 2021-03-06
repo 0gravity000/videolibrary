@@ -32,10 +32,12 @@ Route::get('/video/index', 'VideoController@index');
 Route::get('/admin', function () {
     return view('admin');
 });
-Route::get('/admin/category', 'AdminController@index_category');
-Route::get('/admin/category/create', 'AdminController@create_category');
-Route::get('/admin/category/{id}', 'AdminController@show_category');
-Route::post('/admin/category', 'AdminController@update_category');
+Route::get('/admin/mastercategory', 'AdminController@index_mastercategory');
+Route::get('/admin/mastercategory/create', 'AdminController@create_mastercategory');
+Route::get('/admin/mastercategory/{id}', 'AdminController@show_mastercategory');
+Route::post('/admin/mastercategory/update', 'AdminController@update_mastercategory');
+Route::post('/admin/mastercategory/store', 'AdminController@store_mastercategory');
+
 Route::get('/admin/video', 'AdminController@index_video');
 Route::get('/admin/video/create', 'AdminController@create_video');
 Route::get('/admin/video/{id}', 'AdminController@show_video');

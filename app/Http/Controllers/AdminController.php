@@ -14,12 +14,12 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index_category()
+    public function index_mastercategory()
     {
         //
         $mastercategories = MasterCategory::all();
 
-        return view('admin_category' ,compact('mastercategories') );
+        return view('admin_mastercategory' ,compact('mastercategories') );
     }
 
     public function index_video()
@@ -35,15 +35,16 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create_category()
+    public function create_mastercategory()
     {
-        //新しいカテゴリは自動スクレイピングの対象外 必要なら見直す
+        /*
         $category = new MasterCategory;
         $category->name = "new category";
         $category->save();
         $category = MasterCategory::orderBy('id', 'desc')->first();
+        */
 
-        return view('admin_category_update', compact('category'));
+        return view('admin_mastercategory_create', compact('category'));
     }
 
     public function create_video()
@@ -67,7 +68,23 @@ class AdminController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store_video(Request $request)
+    public function store_mastercategory(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => ['unique:master_categories,name']
+        ]);
+        //dd($validatedData);
+
+        //master_categoriesテーブルに登録
+        //新しいカテゴリは自動スクレイピングの対象外 必要なら見直す
+        $category = new MasterCategory();
+        $category->name = $request->name;
+        $category->save();
+
+        return redirect('/admin/mastercategory');
+    }
+
+     public function store_video(Request $request)
     {
         //
         //dd($request);
@@ -123,11 +140,11 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show_category($id)
+    public function show_mastercategory($id)
     {
         $category = MasterCategory::where('id', $id)->first();
  
-        return view('admin_category_update', compact('category'));
+        return view('admin_mastercategory_update', compact('category'));
     }
 
     public function show_video($id)
@@ -156,15 +173,15 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update_category(Request $request)
+    public function update_mastercategory(Request $request)
     {
         //
         //dd($request);
         $category = MasterCategory::where('id', $request->InputId)->first();
-        $category->name = $request->InputName;
+        $category->name = $request->name;
         $category->save();
 
-        return redirect('/admin/category');
+        return redirect('/admin/mastercategory');
     }
 
     public function update_video(Request $request)
