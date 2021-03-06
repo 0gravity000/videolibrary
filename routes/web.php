@@ -21,12 +21,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/root', function () {
-    return view('root');
-});
-Route::get('/video/index_recentlyadd', 'VideoController@index_recentlyadd');
-Route::get('/video/index_toprated', 'VideoController@index_toprated');
-Route::get('/video/index_memberbenefits', 'VideoController@index_memberbenefits');
+Route::get('/root', 'VideoController@index');
+Route::get('/index/{id}', 'VideoController@index_id');
 Route::get('/video/manual_download', 'VideoController@manual_download');
 Route::get('/video/index', 'VideoController@index');
 Route::get('/admin', function () {

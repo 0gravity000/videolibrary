@@ -9,16 +9,28 @@
     </div>
     <div class="row">
         @foreach ($videos as $video)
-        <h1><a href="{{ $video->url }}" target="_blank" rel="noopener noreferrer">
-            {{ $video->title }}
-        </a></h1>
-            @foreach ($video->categories as $category)
-            {{ $mastercategories->find($category->master_category_id)->name }}&nbsp;/&nbsp;
-            @endforeach
-            <br>
-            {{ $video->season }}&nbsp;/&nbsp;
-            {{ $video->year }}
-            {{ $video->description }}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <a href="{{ $video->url }}" target="_blank" rel="noopener noreferrer">
+                        {{ $video->title }}
+                    </a>
+                </h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    @foreach ($video->categories as $category)
+                    {{ $mastercategories->find($category->master_category_id)->name }}&nbsp;/&nbsp;
+                    @endforeach
+                </h6>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    {{ $video->season }}&nbsp;/&nbsp;{{ $video->year }} 
+                </h6>
+                <p class="card-text">
+                    {{ $video->description }}
+                </p>
+              <a href="#" class="card-link">Card link</a>
+              <a href="#" class="card-link">Another link</a>
+            </div>
+        </div>
         @endforeach
     </div>
 </div>

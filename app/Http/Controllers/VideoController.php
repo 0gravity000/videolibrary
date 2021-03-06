@@ -19,10 +19,18 @@ class VideoController extends Controller
 
     public function index()
     {
-        $videos = Video::all();
+        $videos = Video::all()->shuffle();
         $mastercategories = MasterCategory::all();
 
-        return view('video_index' ,compact('videos','mastercategories') );
+        return view('root' ,compact('videos','mastercategories') );
+    }
+
+    public function index_id($id)
+    {
+        $categories = Category::where('master_category_id', $id)->get()->shuffle();
+        $mastercategories = MasterCategory::all();
+
+        return view('video_category' ,compact('categories','mastercategories','id') );
     }
 
     /**
