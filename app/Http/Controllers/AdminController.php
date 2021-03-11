@@ -88,11 +88,18 @@ class AdminController extends Controller
     {
         //
         //dd($request);
+        if(Video::where('title', $request->title)->where($request->InputSeason)->exists()) {
+            $request->session()->flash('status', '作品は既に登録されています');
+            return redirect('/admin/video');
+        }
+
+        /*
         //バリデーションチェック
         $validatedData = $request->validate([
             'title' => ['unique:videos,title']
         ]);
         //dd($validatedData);
+        */
 
         //videoテーブルに登録
         $video = new Video;

@@ -7,16 +7,12 @@
             <a href="/admin">管理者メニュー</a> > 
             <a href="/admin/video">手動で作品を登録・編集する</a><br>
             <hr>
-            @if ($errors->any())
+            @if (session('status'))
             <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+                {{ session('status') }}
             </div>
             @endif
-        
+                  
             <form method="POST" action="/admin/video/store">
                 @csrf
                 <div class="mb-3">

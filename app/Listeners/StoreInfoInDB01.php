@@ -126,7 +126,8 @@ class StoreInfoInDB01
                 //DBに登録
                 foreach ($titles[$idx-1] as $title) {
                     //videoテーブルに登録
-                    if (Video::where('title', $title)->doesntExist()) {
+                    if (Video::where('title', $title)->
+                        where('season', $seasons[$idx-1][0])->doesntExist()) {
                         //新規作成
                         $video = new Video;
                         $video->title = $title;
