@@ -88,7 +88,7 @@ class AdminController extends Controller
     {
         //
         //dd($request);
-        if(Video::where('title', $request->title)->where($request->InputSeason)->exists()) {
+        if(Video::where('title', $request->title)->where('season', $request->InputSeason)->exists()) {
             $request->session()->flash('status', '作品は既に登録されています');
             return redirect('/admin/video');
         }
