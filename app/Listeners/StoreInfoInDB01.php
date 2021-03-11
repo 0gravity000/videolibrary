@@ -127,13 +127,14 @@ class StoreInfoInDB01
                 foreach ($titles[$idx-1] as $title) {
                     //videoテーブルに登録
                     if (Video::where('title', $title)->
-                        where('season', $seasons[$idx-1][0])->doesntExist()) {
+                        　where('season', $seasons[$idx-1][0])->doesntExist()) {
                         //新規作成
                         $video = new Video;
                         $video->title = $title;
                     } else {
                         //更新
-                        $video = Video::where('title', $title)->first();
+                        $video = Video::where('title', $title)->
+                        　where('season', $seasons[$idx-1][0])->first();
                     }
                     $video->url = "https://amazon.co.jp".$urls[$idx-1][0];
                     $video->season = $seasons[$idx-1][0];
