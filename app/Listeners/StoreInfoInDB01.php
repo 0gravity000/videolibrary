@@ -126,15 +126,21 @@ class StoreInfoInDB01
                 //DBに登録
                 foreach ($titles[$idx-1] as $title) {
                     //videoテーブルに登録
-                    if (Video::where('title', $title)->
-                        　where('season', $seasons[$idx-1][0])->doesntExist()) {
+                    if (Video::where('title', $title)->doesntExist()) {
                         //新規作成
+                        //dd($title);
                         $video = new Video;
                         $video->title = $title;
                     } else {
-                        //更新
-                        $video = Video::where('title', $title)->
-                        　where('season', $seasons[$idx-1][0])->first();
+                        if(Video::where('title', $title)->where('season', $seasons[$idx-1][0])->doesntExist()) {
+                            //新規作成 タイトルあり、シーズンなし
+                            $video = new Video;
+                            $video->title = $title;
+                            //dd($video);
+                        } else {
+                            //更新 タイトルあり、シーズンあり
+                            $video = Video::where('title', $title)->where('season', $seasons[$idx-1][0])->first();
+                        }
                     }
                     $video->url = "https://amazon.co.jp".$urls[$idx-1][0];
                     $video->season = $seasons[$idx-1][0];
