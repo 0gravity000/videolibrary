@@ -19,7 +19,8 @@ class VideoController extends Controller
 
     public function index()
     {
-        $videos = Video::all()->shuffle();
+        $videos = Video::orderBy('title')->paginate(200);
+        //$videos = Video::paginate(250)->shuffle();
         $mastercategories = MasterCategory::all();
 
         return view('root' ,compact('videos','mastercategories') );
@@ -27,7 +28,8 @@ class VideoController extends Controller
 
     public function index_id($id)
     {
-        $categories = Category::where('master_category_id', $id)->get()->shuffle();
+        $categories = Category::where('master_category_id', $id)->paginate(100);
+        //$categories = Category::where('master_category_id', $id)->get()->shuffle();
         $mastercategories = MasterCategory::all();
 
         return view('video_category' ,compact('categories','mastercategories','id') );

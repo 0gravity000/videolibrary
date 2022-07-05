@@ -15,6 +15,9 @@
         </ul>
     </div>
     <div class="row">
+        <!-- pager -->
+        {{ $videos->links() }}
+
         @foreach ($videos as $video)
         <div class="card">
             <div class="card-body">
@@ -37,6 +40,10 @@
             </div>
         </div>
         @endforeach
+
+        <!-- pager -->
+        {{ $videos->links() }}
+        
     </div>
 </div>
 @endsection

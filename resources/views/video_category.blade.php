@@ -21,6 +21,9 @@
         </ul>
     </div>
     <div class="row">
+        <!-- pager -->
+        {{ $categories->links() }}
+
         @foreach ($categories as $category)
         <div class="card">
             <div class="card-body">
@@ -41,6 +44,10 @@
             </div>
         </div>
         @endforeach
+
+        <!-- pager -->
+        {{ $categories->links() }}
+
     </div>
 </div>
 @endsection
