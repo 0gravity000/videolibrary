@@ -7,9 +7,9 @@
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/root">全部</a>
             </li>
-            @foreach ($mastercategories as $mastercategory)
+            @foreach ($categories as $category)
             <li class="nav-item">
-                <a class="nav-link" href="/index/{{ $mastercategory->id }}">{{ $mastercategory->name }}</a>
+                <a class="nav-link" href="/index/{{ $category->id }}">{{ $category->name }}</a>
             </li>
             @endforeach
         </ul>
@@ -28,7 +28,7 @@
                 </h5>
                 <h6 class="card-subtitle mb-2 text-muted">
                     @foreach ($video->categories as $category)
-                    {{ $mastercategories->find($category->master_category_id)->name }}&nbsp;/&nbsp;
+                    {{ $category->name }}&nbsp;/&nbsp;
                     @endforeach
                 </h6>
                 <h6 class="card-subtitle mb-2 text-muted">

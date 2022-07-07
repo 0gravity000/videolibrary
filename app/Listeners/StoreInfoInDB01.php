@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Goutte\Client;
 use App\Video;
 use App\Category;
+use Illuminate\Support\Facades\DB;
 
 class StoreInfoInDB01
 {
@@ -148,22 +149,20 @@ class StoreInfoInDB01
                     $video->description = $discribes[$idx-1][0];
                     $video->save();
 
-                    //categoryテーブルに登録
-                    if (Category::where('video_id', $video->id)->doesntExist()) {
-                        //新規作成 videoidなし
-                        $category = new Category;
-                        $category->master_category_id = $urlidx;
-                        $category->video_id = $video->id;
-                        $category->save();
+                    //category_videoテーブルに登録
+                    if (DB::table('category_video')->where('video_id', $video->id)->doesntExist()) {
+                        //新規作成 video_idなし
+                        DB::table('category_video')->insert(
+                            ['category_id' => $urlidx, 'video_id' => $video->id]
+                        );
                     } else {
-                        //新規作成 videoidあり categoryidなし
-                        if (Category::where('video_id', $video->id)
-                            ->where('master_category_id', $urlidx)
+                        //新規作成 video_idあり category_idなし
+                        if (DB::table('category_video')->where('video_id', $video->id)
+                            ->where('category_id', $urlidx)
                             ->doesntExist()) {
-                            $category = new Category;
-                            $category->master_category_id = $urlidx;
-                            $category->video_id = $video->id;
-                            $category->save();
+                                DB::table('category_video')->insert(
+                                    ['category_id' => $urlidx, 'video_id' => $video->id]
+                                );
                         }
                     }
 

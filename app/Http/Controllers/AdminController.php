@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\MasterCategory;
 use App\Video;
 use App\Category;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -17,9 +17,9 @@ class AdminController extends Controller
     public function index_mastercategory()
     {
         //
-        $mastercategories = MasterCategory::all();
+        $categories = Category::all();
 
-        return view('admin_mastercategory' ,compact('mastercategories') );
+        return view('admin_mastercategory' ,compact('categories') );
     }
 
     public function index_video()
@@ -57,9 +57,9 @@ class AdminController extends Controller
         $video = Video::orderBy('id', 'desc')->first();
         return view('admin_video_update', compact('video'));
         */
-        $mastercategories = MasterCategory::all();
+        $categories = Category::all();
 
-        return view('admin_video_create', compact('mastercategories'));
+        return view('admin_video_create', compact('categories'));
     }
 
     /**
@@ -71,13 +71,13 @@ class AdminController extends Controller
     public function store_mastercategory(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => ['unique:master_categories,name']
+            'name' => ['unique:categories,name']
         ]);
         //dd($validatedData);
 
-        //master_categoriesテーブルに登録
+        //categoriesテーブルに登録
         //新しいカテゴリは自動スクレイピングの対象外 必要なら見直す
-        $category = new MasterCategory();
+        $category = new Category();
         $category->name = $request->name;
         $category->save();
 
@@ -113,16 +113,17 @@ class AdminController extends Controller
         $video->save();
         //dd($video);
 
-        //categoryテーブルに登録
+        //category_videoテーブルに登録
         if ($request->categories[0] != "0") {
             for ($idx=0; $idx < count($request->categories) ; $idx++) { 
-                $category = new Category;
-                $category->master_category_id = (int)($request->categories[$idx]);
-                $category->video_id = $video->id;
-                $category->save();
+                DB::table('category_video')->insert(
+                    [
+                        'category_id' => (int)($request->categories[$idx]),
+                        'video_id' => $video->id
+                    ]
+                );
             }
         }
-
         return redirect('/admin/video');
     }
 
@@ -134,7 +135,7 @@ class AdminController extends Controller
      */
     public function show_mastercategory($id)
     {
-        $category = MasterCategory::where('id', $id)->first();
+        $category = Category::where('id', $id)->first();
  
         return view('admin_mastercategory_update', compact('category'));
     }
@@ -143,9 +144,9 @@ class AdminController extends Controller
     {
         $video = Video::where('id', $id)->first();
         //$categories = Category::where('video_id', $id)->get();
-        $mastercategories = MasterCategory::all();
+        $categories = Category::all();
         //dd($categories);
-        return view('admin_video_update', compact('video','mastercategories','categories'));
+        return view('admin_video_update', compact('video','categories'));
     }
 
     /**
@@ -170,7 +171,7 @@ class AdminController extends Controller
     {
         //
         //dd($request);
-        $category = MasterCategory::where('id', $request->InputId)->first();
+        $category = Category::where('id', $request->InputId)->first();
         $category->name = $request->name;
         $category->save();
 
@@ -189,21 +190,22 @@ class AdminController extends Controller
         $video->description = $request->InputDescription;
         $video->save();
 
-        //categoryテーブルに登録前に現在のカテゴリのレコードをすべてクリア
-        //dd(Category::where('video_id', $video->id)->get());
-        if (Category::where('video_id', $video->id)->exists()) {
-            //videoidありの場合
-            Category::where('video_id', $video->id)->delete();
+        //category_videoテーブルに登録前に現在のvideo_idのレコードをすべてクリア
+        if (DB::table('category_video')->where('video_id', $video->id)->exists()) {
+            //video_idありの場合
+            DB::table('category_video')->where('video_id', $video->id)->delete();
         }
 
-        //categoryテーブルに登録
+        //category_videoテーブルに登録
         if ($request->categories[0] != "0") {
             //カテゴリ指定ありの場合
             for ($idx=0; $idx < count($request->categories) ; $idx++) { 
-                $category = new Category;
-                $category->master_category_id = (int)($request->categories[$idx]);
-                $category->video_id = $video->id;
-                $category->save();
+                DB::table('category_video')->insert(
+                    [
+                        'category_id' => (int)($request->categories[$idx]),
+                        'video_id' => $video->id
+                    ]
+                );
             }
         }
 
