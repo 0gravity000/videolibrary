@@ -9,6 +9,6 @@ class Video extends Model
     //
     public function categories()
     {
-        return $this->hasMany('App\Category');
+        return $this->belongsToMany('App\Category');
     }
 }

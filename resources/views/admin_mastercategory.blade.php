@@ -9,7 +9,7 @@
             <hr>
             <a href="/admin/mastercategory/create">新規作成</a>
             <div>
-                @foreach($mastercategories as $category)
+                @foreach($categories as $category)
                 <a href="/admin/mastercategory/{{ $category->id }}">{{ $category->id }}：{{ $category->name }}</a><br>
                 @endforeach
             </div>

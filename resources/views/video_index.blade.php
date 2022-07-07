@@ -18,7 +18,7 @@
                 </h5>
                 <h6 class="card-subtitle mb-2 text-muted">
                     @foreach ($video->categories as $category)
-                    {{ $mastercategories->find($category->master_category_id)->name }}&nbsp;/&nbsp;
+                    {{ $mastercategories->find($category->category_id)->name }}&nbsp;/&nbsp;
                     @endforeach
                 </h6>
                 <h6 class="card-subtitle mb-2 text-muted">
