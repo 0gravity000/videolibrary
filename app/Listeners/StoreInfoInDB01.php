@@ -10,6 +10,7 @@ use Goutte\Client;
 use App\Video;
 use App\Category;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class StoreInfoInDB01
 {
@@ -153,7 +154,12 @@ class StoreInfoInDB01
                     if (DB::table('category_video')->where('video_id', $video->id)->doesntExist()) {
                         //新規作成 video_idなし
                         DB::table('category_video')->insert(
-                            ['category_id' => $urlidx, 'video_id' => $video->id]
+                            [
+                                'category_id' => $urlidx,
+                                'video_id' => $video->id,
+                                'created_at' => Carbon::now(),
+                                'updated_at' => Carbon::now()
+                            ]
                         );
                     } else {
                         //新規作成 video_idあり category_idなし
@@ -161,7 +167,12 @@ class StoreInfoInDB01
                             ->where('category_id', $urlidx)
                             ->doesntExist()) {
                                 DB::table('category_video')->insert(
-                                    ['category_id' => $urlidx, 'video_id' => $video->id]
+                                    [
+                                        'category_id' => $urlidx,
+                                        'video_id' => $video->id,
+                                        'created_at' => Carbon::now(),
+                                        'updated_at' => Carbon::now()
+                                    ]
                                 );
                         }
                     }
