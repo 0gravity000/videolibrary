@@ -162,7 +162,7 @@ class VideoController extends Controller
 
     public function index()
     {
-        $videos = Video::orderBy('title')->paginate(200);
+        $videos = Video::orderBy('updated_at', 'desc')->paginate(200);
         //$videos = Video::paginate(250)->shuffle();
         $categories = Category::all();
 
@@ -175,7 +175,7 @@ class VideoController extends Controller
         $videoids = DB::table('category_video')->where('category_id', $id)->pluck('video_id');
         //dd($videoids);
         //$categoryvideos = DB::table('category_video')->where('category_id', $id)->get();
-        $videos = Video::whereIn('id', $videoids)->paginate(100);
+        $videos = Video::orderBy('updated_at', 'desc')->whereIn('id', $videoids)->paginate(100);
         //dd($videos);
         //$categories = Category::where('master_category_id', $id)->get()->shuffle();
 
