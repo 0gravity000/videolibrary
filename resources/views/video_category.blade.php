@@ -5,7 +5,7 @@
     <div class="row">
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="/root">全部</a>
+                <a class="nav-link" aria-current="page" href="/videos">全部</a>
             </li>
             @foreach ($categories as $category)
             <li class="nav-item">

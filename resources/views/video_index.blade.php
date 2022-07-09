@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8">
-            <a href="/root">戻る</a><br>
+            <a href="/videos">戻る</a><br>
         </div>
     </div>
     <div class="row">

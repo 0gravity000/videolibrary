@@ -14,7 +14,7 @@ class VideoController extends Controller
     public function manual_download()
     {
         event(new DailyCheckAmazonPrimeVideo01());
-        return redirect('/root');
+        return redirect('/videos');
 
         // debug code /////////////////////
         /*

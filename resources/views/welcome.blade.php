@@ -85,7 +85,7 @@
                 </div>
 
                 <div class="links">
-                    <a href="/root">お気に入りの作品をチェック！</a>
+                    <a href="/videos">お気に入りの作品をチェック！</a>
                 </div>
             </div>
         </div>
