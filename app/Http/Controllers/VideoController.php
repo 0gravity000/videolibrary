@@ -182,6 +182,17 @@ class VideoController extends Controller
         return view('video_category' ,compact('videos','categories','id') );
     }
 
+    public function index_search(Request $request)
+    {
+        //dd($request->input('search'));
+        $videos = Video::where('title', 'like', '%'.$request->input('search').'%')->
+                    orwhere('description', 'like', '%'.$request->input('search').'%')->
+                    orderBy('updated_at', 'desc')->paginate(200);
+        $categories = Category::all();
+
+        return view('video_search' ,compact('videos','categories') );
+    }
+
     /**
      * Show the form for creating a new resource.
      *

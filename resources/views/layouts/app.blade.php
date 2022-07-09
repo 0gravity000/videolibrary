@@ -38,11 +38,16 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
                     </ul>
 
                     <!-- Right Side Of Navbar -->
+                    <!-- サーチバー -->
                     <ul class="navbar-nav ml-auto">
+                        <form method="POST" action="/videos/search" class="form-inline my-2 my-lg-0">
+                            @csrf
+                            <input class="form-control mr-sm-2" type="search" name="search" placeholder="検索キーワード">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </form>
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
