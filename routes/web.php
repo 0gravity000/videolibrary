@@ -23,7 +23,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/videos', 'VideoController@index');
 Route::get('/videos/category/{id}', 'VideoController@index_categoryid');
-Route::get('/video/manual_download', 'VideoController@manual_download');
+Route::get('/videos/manual_download', 'VideoController@manual_download');
 Route::get('/admin', function () {
     return view('admin');
 });
