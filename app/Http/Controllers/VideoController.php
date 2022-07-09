@@ -169,7 +169,7 @@ class VideoController extends Controller
         return view('root' ,compact('videos','categories') );
     }
 
-    public function index_id($id)
+    public function index_categoryid($id)
     {
         $categories = Category::all();
         $videoids = DB::table('category_video')->where('category_id', $id)->pluck('video_id');

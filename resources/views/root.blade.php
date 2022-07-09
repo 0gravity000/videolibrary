@@ -9,7 +9,7 @@
             </li>
             @foreach ($categories as $category)
             <li class="nav-item">
-                <a class="nav-link" href="/index/{{ $category->id }}">{{ $category->name }}</a>
+                <a class="nav-link" href="/videos/category/{{ $category->id }}">{{ $category->name }}</a>
             </li>
             @endforeach
         </ul>

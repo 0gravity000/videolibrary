@@ -9,7 +9,7 @@
             </li>
             @foreach ($categories as $category)
             <li class="nav-item">
-                <a href="/index/{{ $category->id }}" class="nav-link
+                <a href="/videos/category/{{ $category->id }}" class="nav-link
                     @if ($category->id == $id)
                         active
                     @endif
