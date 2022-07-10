@@ -162,22 +162,25 @@ class StoreInfoInDB01
                 //DBに登録
                 foreach ($titles[$idx-1] as $title) {
                     //videoテーブルに登録
-                    if (Video::where('title', $title)->doesntExist()) {
-                        //新規作成
+                    //同一タイトルも同一URLなし
+                    if (Video::where('title', $title)->where('url', $urls[$idx-1][0])->doesntExist()) {
                         //dd($title);
+                        //レコード新規作成 
                         $video = new Video;
-                        $video->title = $title;
                     } else {
-                        if(Video::where('title', $title)->where('season', $seasons[$idx-1][0])->doesntExist()) {
-                            //新規作成 タイトルあり、シーズンなし
+                        //同一タイトルまたは同一URLが存在する場合
+                        //同一タイトルまたは同一URLが存在し、かつ同一シーズンがない
+                        if (Video::where('title', $title)->orwhere('url', $urls[$idx-1][0])->where('season', $seasons[$idx-1][0])->doesntExist()) {
+                            //レコード新規作成 
                             $video = new Video;
-                            $video->title = $title;
                             //dd($video);
                         } else {
-                            //更新 タイトルあり、シーズンあり
-                            $video = Video::where('title', $title)->where('season', $seasons[$idx-1][0])->first();
+                            //同一タイトルまたは同一URLが存在し、かつ同一シーズンがない
+                            //レコード更新
+                            $video = Video::where('title', $title)->orwhere('url', $urls[$idx-1][0])->where('season', $seasons[$idx-1][0])->first();
                         }
                     }
+                    $video->title = $title;
                     $video->url = "https://amazon.co.jp".$urls[$idx-1][0];
                     $video->season = $seasons[$idx-1][0];
                     $video->year = $years[$idx-1][0];
@@ -185,8 +188,9 @@ class StoreInfoInDB01
                     $video->save();
 
                     //category_videoテーブルに登録
+                    //video_idなし
                     if (DB::table('category_video')->where('video_id', $video->id)->doesntExist()) {
-                        //新規作成 video_idなし
+                        //レコード新規作成
                         DB::table('category_video')->insert(
                             [
                                 'category_id' => $urlidx,
@@ -196,18 +200,18 @@ class StoreInfoInDB01
                             ]
                         );
                     } else {
-                        //新規作成 video_idあり category_idなし
-                        if (DB::table('category_video')->where('video_id', $video->id)
-                            ->where('category_id', $urlidx)
-                            ->doesntExist()) {
-                                DB::table('category_video')->insert(
-                                    [
-                                        'category_id' => $urlidx,
-                                        'video_id' => $video->id,
-                                        'created_at' => Carbon::now(),
-                                        'updated_at' => Carbon::now()
-                                    ]
-                                );
+                        //video_idありの場合
+                        //category_idなし
+                        if (DB::table('category_video')->where('category_id', $urlidx)->doesntExist()) {
+                            //レコード新規作成
+                            DB::table('category_video')->insert(
+                                [
+                                    'category_id' => $urlidx,
+                                    'video_id' => $video->id,
+                                    'created_at' => Carbon::now(),
+                                    'updated_at' => Carbon::now()
+                                ]
+                            );
                         }
                     }
 
