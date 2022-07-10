@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Goutte\Client;
 use App\Category;
 use App\Events\DailyCheckAmazonPrimeVideo01;
+use App\Events\CheckVideosTableYear;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -18,7 +19,15 @@ class VideoController extends Controller
         return redirect('/videos');
 
         // debug code はここに追加する /////////////////////
+        // debug code end ///////////////////////
+    }
 
+    public function check_year()
+    {
+        event(new CheckVideosTableYear());
+        return redirect('/videos');
+
+        // debug code はここに追加する /////////////////////
         // debug code end ///////////////////////
     }
 

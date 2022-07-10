@@ -21,6 +21,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\DailyCheckAmazonPrimeVideo01' => [
             'App\Listeners\StoreInfoInDB01',
         ],
+        'App\Events\CheckVideosTableYear' => [
+            'App\Listeners\StoreYearToVideosTable',
+        ],
     ];
 
     /**

@@ -252,6 +252,6 @@ class StoreInfoInDB01
         #av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div.lAtJLC > div > div:nth-child(3) > div > p
         */
 
-        Log::debug('取り込み 完了!!');
+        Log::debug('StoreInfoInDB01.php 取り込み 完了!!');
     }
 }

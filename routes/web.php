@@ -25,6 +25,7 @@ Route::get('/videos', 'VideoController@index');
 Route::get('/videos/category/{id}', 'VideoController@index_categoryid');
 Route::post('/videos/search', 'VideoController@index_search');
 Route::get('/videos/manual_download', 'VideoController@manual_download');
+Route::get('/videos/check_year', 'VideoController@check_year');
 Route::get('/admin', function () {
     return view('admin');
 });
