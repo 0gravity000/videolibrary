@@ -81,6 +81,8 @@ class StoreInfoInDB01
             for ($idx=1; $idx < 21 ; $idx++) { 
                 //タイトル
                 try {
+                    //#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div._1y15Fl.dvui-beardContainer.D0Lu_p.av-grid-beard > div._1N2P-J.mustache._2mxudr > div._2hMXwV > div.vRplU5 > span > a
+                    //#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div.lAtJLC > div > div:nth-child(3) > div > h3
                     $titles[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
                         $tmp = $node->filter('span > a')->text();
                         return $tmp;
@@ -99,18 +101,50 @@ class StoreInfoInDB01
                 }
                 //シーズン
                 try {
+                    //#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div._1y15Fl.dvui-beardContainer.D0Lu_p.av-grid-beard > div._1N2P-J.mustache._2mxudr > div._2hMXwV > div._27-0OW.dvui-beard-second-line > div > div > div:nth-child(1)
+                    //#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div._1y15Fl.dvui-beardContainer.D0Lu_p.av-grid-beard > div._1N2P-J.mustache._2mxudr > div._2hMXwV > div._27-0OW.dvui-beard-second-line > div > div > div:nth-child(1)
+                    //#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(2) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div._1y15Fl.dvui-beardContainer.D0Lu_p.av-grid-beard > div._1N2P-J.mustache._2mxudr > div._2hMXwV > div._27-0OW.dvui-beard-second-line > div > div > div:nth-child(1)
+                    //#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(9) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div._1y15Fl.dvui-beardContainer.D0Lu_p.av-grid-beard > div._1N2P-J.mustache._2mxudr > div._2hMXwV > div._27-0OW.dvui-beard-second-line > div > div > div:nth-child(1) > div.imdb-logo
+                    //#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(9) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div._1y15Fl.dvui-beardContainer.D0Lu_p.av-grid-beard > div._1N2P-J.mustache._2mxudr > div._2hMXwV > div._27-0OW.dvui-beard-second-line > div > div > div:nth-child(1) > div:nth-child(2)
                     $seasons[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
-                        $tmp = $node->filter('span > span > span:nth-child(1)')->text();
+                        $tmp = $node->filter('div._27-0OW.dvui-beard-second-line > div > div > div:nth-child(1)')->text();
+                        //dd($tmp);
                         return $tmp;
                     });
+                    //「シーズンx」でない場合があるため、「シーズン」文字列を含まない場合、空文字に時間する
+                    //dd($seasons[$idx-1][0]);
+                    if(mb_strpos($seasons[$idx-1][0], "シーズン") == false) {
+                        $seasons[$idx-1][0] = "";
+                    }
+                    //dd($seasons[$idx-1][0]);
                 } catch (\Exception $e) {
                     $seasons[$idx-1][0] = "";
                 }
                 //年
                 try {
+                    //#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div._1y15Fl.dvui-beardContainer.D0Lu_p.av-grid-beard > div._1N2P-J.mustache._2mxudr > div._2hMXwV > div._27-0OW.dvui-beard-second-line > div > div > div:nth-child(2)
+                    //#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div.lAtJLC > div > div:nth-child(4) > div > div.nPUwP8._2Z_R2D
+                    //#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(2) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div.lAtJLC > div > div:nth-child(4) > div > div:nth-child(2)
+                    //#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(4) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div.lAtJLC > div > div:nth-child(4) > div > div:nth-child(2)
+                    //#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(8) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div.lAtJLC > div > div:nth-child(4) > div > div.nPUwP8._2Z_R2D
+                    //#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(9) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div.lAtJLC > div > div:nth-child(4) > div > div:nth-child(3)
+                    //#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div.lAtJLC > div > div:nth-child(4) > div > div:nth-child(2)
+                    //#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(12) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div.lAtJLC > div > div:nth-child(4) > div > div:nth-child(3)
+                    //#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(13) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div.lAtJLC > div > div:nth-child(4) > div > div:nth-child(2)
                     $years[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
-                    $tmp = $node->filter('span > span > span:nth-child(2)')->text();
-                    return $tmp;
+                        $tmp = "";
+                        //div:nth-child(1)~(4)分ループ どこかに「年」が格納される確率が高い
+                        for ($i=1; $i < 5; $i++) { 
+                            $isyear = $node->filter('div.lAtJLC > div > div:nth-child(4) > div > div:nth-child('.$i.')')->text();
+                            //「年」のチェック処理 4桁の数値なら年とみなす
+                            if (preg_match('/\d{4}/', $isyear)) {
+                                $tmp = $isyear;
+                                //dd($isyear);
+                                break;
+                            }
+                        }
+                        dd($tmp);
+                        return $tmp;
                     });
                 } catch (\Exception $e) {
                     $years[$idx-1][0] = "";
