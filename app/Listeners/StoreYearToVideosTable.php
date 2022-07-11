@@ -81,18 +81,18 @@ class StoreYearToVideosTable
                     return $tmp;
                 });
             } catch (\Exception $e) {
-                $years = "";
+                $years[0] = ""; //要検証
             }
-            
+
             //DB登録処理
             //年がDBと異なる場合
-            if ($video->year != $years) {
+            if ($video->year != $years[0]) {    //要検証
                 //元の「年」が4桁の数値ならそのまま
                 if (preg_match('/\d{4}/', $video->year)) {
                     //何もしない
                 } else {
                     //DBを更新
-                    $video->year = $years;
+                    $video->year = $years[0];   //要検証
                     $video->save();
                 }
             }

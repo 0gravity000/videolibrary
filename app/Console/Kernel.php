@@ -31,9 +31,11 @@ class Kernel extends ConsoleKernel
             event(new DailyCheckAmazonPrimeVideo01());
         })->dailyAt('3:00');    //毎日3:00に実行する
 
+        /* 必要なときだけコメントをはずす
         $schedule->call(function () {
             event(new CheckVideosTableYear());
         })->dailyAt('4:00');    //毎日4:00に実行する
+        */
     }
 
     /**
