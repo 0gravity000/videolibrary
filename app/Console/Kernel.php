@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Events\DailyCheckAmazonPrimeVideo01;
 use App\Events\CheckVideosTableYear;
+use App\Events\CheckVideosTableSeason;
 
 class Kernel extends ConsoleKernel
 {
@@ -36,6 +37,10 @@ class Kernel extends ConsoleKernel
             event(new CheckVideosTableYear());
         })->dailyAt('4:00');    //毎日4:00に実行する
         */
+
+        $schedule->call(function () {
+            event(new CheckVideosTableSeason());
+        })->dailyAt('4:00');    //毎日4:00に実行する
     }
 
     /**

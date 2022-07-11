@@ -24,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\CheckVideosTableYear' => [
             'App\Listeners\StoreYearToVideosTable',
         ],
+        'App\Events\CheckVideosTableSeason' => [
+            'App\Listeners\StoreSeasonToVideosTable',
+        ],
     ];
 
     /**

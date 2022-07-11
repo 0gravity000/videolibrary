@@ -8,6 +8,7 @@ use Goutte\Client;
 use App\Category;
 use App\Events\DailyCheckAmazonPrimeVideo01;
 use App\Events\CheckVideosTableYear;
+use App\Events\CheckVideosTableSeason;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -31,6 +32,15 @@ class VideoController extends Controller
         // debug code end ///////////////////////
     }
 
+    public function check_season()
+    {
+        event(new CheckVideosTableSeason());
+        return redirect('/videos');
+        
+        // debug code はここに追加する /////////////////////
+        // debug code end ///////////////////////
+    }
+    
     public function index()
     {
         $videos = Video::orderBy('updated_at', 'desc')->paginate(200);

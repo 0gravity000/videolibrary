@@ -113,7 +113,7 @@ class StoreInfoInDB01
                     });
                     //「シーズンx」でない場合があるため、「シーズン」文字列を含まない場合、空文字に時間する
                     //dd($seasons[$idx-1][0]);
-                    if(mb_strpos($seasons[$idx-1][0], "シーズン") == false) {
+                    if(mb_strpos($seasons[$idx-1][0], "シーズン") === false) {
                         $seasons[$idx-1][0] = "";
                     }
                     //dd($seasons[$idx-1][0]);
