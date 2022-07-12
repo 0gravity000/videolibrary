@@ -122,19 +122,36 @@ class StoreSeasonToVideosTable
             }
             //var_dump('$seasons:');
             //var_dump($seasons);
+
             //DB登録処理
-            //シーズンが取得できなかった場合
-            if ($seasons == "") {
-                //何もしない
-            //取得したシーズンがDBと異なる場合
-            } elseif ($video->season != $seasons[0]) {    //要検証
-                var_dump('$seasons[0]:');
-                var_dump($seasons[0]);
-                //元のシーズンが空白 または「シーズン」文字列を含まない場合、DBを更新
-                if (($video->season == "") || (mb_strpos($video->season, "シーズン") === false)) {
-                    //DBを更新
-                    $video->season = $seasons[0];   //要検証
-                    $video->save();
+            //配列かどうかチェック
+            if (is_array($seasons)) {
+                //配列でない
+                if ($seasons == "") {
+                    //何もしない
+                } elseif ($video->season != $seasons) {    //要検証
+                    //var_dump('$seasons]:');
+                    //var_dump($seasons);
+                    //元のシーズンが空白 または「シーズン」文字列を含まない場合、DBを更新
+                    if (($video->season == "") || (mb_strpos($video->season, "シーズン") === false)) {
+                        //DBを更新
+                        $video->season = $seasons;   //要検証
+                        $video->save();
+                    }
+                }
+            } else {
+                //配列の場合
+                if ($seasons[0] == "") {
+                    //何もしない
+                } elseif ($video->season != $seasons[0]) {    //要検証
+                    //var_dump('$seasons[0]:');
+                    //var_dump($seasons[0]);
+                    //元のシーズンが空白 または「シーズン」文字列を含まない場合、DBを更新
+                    if (($video->season == "") || (mb_strpos($video->season, "シーズン") === false)) {
+                        //DBを更新
+                        $video->season = $seasons[0];   //要検証
+                        $video->save();
+                    }
                 }
             }
         }   //$videosループend
