@@ -144,10 +144,10 @@ class StoreSeasonToVideosTable
                 }
             } else {
                 //配列の場合
-                var_dump('video_id:');
-                var_dump($video->id);
-                var_dump('$seasons[0]:');
-                var_dump($seasons[0]);
+                Log::debug('video_id:');
+                Log::debug($video->id);
+                Log::debug('$seasons[0]:');
+                Log::debug($seasons[0]);
                 if ($seasons[0] == "") {
                     //何もしない
                 } elseif ($video->season != $seasons[0]) {    //要検証
