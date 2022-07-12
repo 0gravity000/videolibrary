@@ -144,8 +144,10 @@ class StoreSeasonToVideosTable
                 }
             } else {
                 //配列の場合
-                //var_dump('$seasons[0]:');
-                //var_dump($seasons[0]);
+                var_dump('video_id:');
+                var_dump($video->id);
+                var_dump('$seasons[0]:');
+                var_dump($seasons[0]);
                 if ($seasons[0] == "") {
                     //何もしない
                 } elseif ($video->season != $seasons[0]) {    //要検証
@@ -158,7 +160,7 @@ class StoreSeasonToVideosTable
                 }
             }
         }   //$videosループend
-                
+
         Log::debug('StoreSeasonToVideosTable.php 取り込み 完了!!');
 
     }
