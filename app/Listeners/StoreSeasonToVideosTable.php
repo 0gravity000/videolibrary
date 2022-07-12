@@ -35,7 +35,7 @@ class StoreSeasonToVideosTable
         $client = new Client();
 
         //$videos = Video::all();
-        $videos = Video::where('id', '>', 1118)->get();
+        $videos = Video::where('id', '>', 1137)->get();
         foreach ($videos as $video) {
             //dd($video);
             $crawler = $client->request('GET', $video->url);
