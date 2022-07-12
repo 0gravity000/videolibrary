@@ -35,12 +35,13 @@ class StoreSeasonToVideosTable
         $client = new Client();
 
         $videos = Video::all();
+        //$videos = Video::where('id', 3117)->get();
         foreach ($videos as $video) {
             //dd($video);
             $crawler = $client->request('GET', $video->url);
-            $seasons_not_listbox = array();
-            $seasons_listbox_prime = array();
-            $seasons_listbox_not_prime = array();
+            $seasons_not_listbox = "";
+            $seasons_listbox_prime = "";
+            $seasons_listbox_not_prime = "";
             //シーズン
             try {
                 //リストボックスで選択可能な場合
@@ -68,7 +69,7 @@ class StoreSeasonToVideosTable
                     return $tmp;
                 });
             } catch (\Exception $e) {
-                $seasons_not_listbox[0] = ""; //要検証
+                $seasons_not_listbox = ""; //要検証
             }
             //dd("case1 end");
 
@@ -88,7 +89,7 @@ class StoreSeasonToVideosTable
                     return $tmp;
                 });
             } catch (\Exception $e) {
-                $seasons_listbox_prime[0] = ""; //要検証
+                $seasons_listbox_prime = ""; //要検証
             }
             //dd("case2 end");
                 
@@ -106,27 +107,31 @@ class StoreSeasonToVideosTable
                     return $tmp;
                 });
             } catch (\Exception $e) {
-                $seasons_listbox_not_prime[0] = ""; //要検証
+                $seasons_listbox_not_prime = ""; //要検証
             }
             //dd("case3 end");
 
             //どのケースで取得した「シーズン」かを決定する
-            $seasons[0] = "";
+            $seasons = "";
             if ($seasons_not_listbox != "") {
-                $seasons[0] = $seasons_not_listbox;
+                $seasons = $seasons_not_listbox;
             } elseif ($seasons_listbox_prime != "") {
-                $seasons[0] = $seasons_listbox_prime;
+                $seasons = $seasons_listbox_prime;
             } elseif ($seasons_listbox_not_prime != "") {
-                $seasons[0] = $seasons_listbox_not_prime;
+                $seasons = $seasons_listbox_not_prime;
             }
-
-            //dd($seasons);
-            //dd($seasons[0]);
+            //var_dump('$seasons:');
+            //var_dump($seasons);
             //DB登録処理
+            //シーズンが取得できなかった場合
+            if ($seasons == "") {
+                //何もしない
             //取得したシーズンがDBと異なる場合
-            if ($video->season != $seasons[0]) {    //要検証
-                //元のシーズンが空白の場合、DBを更新
-                if ($video->season == "") {
+            } elseif ($video->season != $seasons[0]) {    //要検証
+                var_dump('$seasons[0]:');
+                var_dump($seasons[0]);
+                //元のシーズンが空白 または「シーズン」文字列を含まない場合、DBを更新
+                if (($video->season == "") || (mb_strpos($video->season, "シーズン") === false)) {
                     //DBを更新
                     $video->season = $seasons[0];   //要検証
                     $video->save();
