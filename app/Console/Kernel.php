@@ -40,7 +40,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function () {
             event(new CheckVideosTableSeason());
-        })->dailyAt('20:10');    //毎日4:00に実行する
+        })->dailyAt('20:50');    //毎日4:00に実行する
     }
 
     /**

@@ -35,7 +35,7 @@ class StoreSeasonToVideosTable
         $client = new Client();
 
         $videos = Video::all();
-        //$videos = Video::where('id', 3117)->get();
+        //$videos = Video::where('id', 1034)->get();
         foreach ($videos as $video) {
             //dd($video);
             $crawler = $client->request('GET', $video->url);
@@ -71,6 +71,7 @@ class StoreSeasonToVideosTable
             } catch (\Exception $e) {
                 $seasons_not_listbox = ""; //要検証
             }
+            //var_dump($seasons_not_listbox);
             //dd("case1 end");
 
             try {
@@ -91,6 +92,7 @@ class StoreSeasonToVideosTable
             } catch (\Exception $e) {
                 $seasons_listbox_prime = ""; //要検証
             }
+            //var_dump($seasons_listbox_prime);
             //dd("case2 end");
                 
             try {
@@ -109,6 +111,7 @@ class StoreSeasonToVideosTable
             } catch (\Exception $e) {
                 $seasons_listbox_not_prime = ""; //要検証
             }
+            //var_dump($seasons_listbox_not_prime);
             //dd("case3 end");
 
             //どのケースで取得した「シーズン」かを決定する
@@ -120,12 +123,12 @@ class StoreSeasonToVideosTable
             } elseif ($seasons_listbox_not_prime != "") {
                 $seasons = $seasons_listbox_not_prime;
             }
-            //var_dump('$seasons:');
-            //var_dump($seasons);
 
             //DB登録処理
             //配列かどうかチェック
-            if (is_array($seasons)) {
+            if (!is_array($seasons)) {
+                //var_dump('$seasons:');
+                //var_dump($seasons);
                 //配列でない
                 if ($seasons == "") {
                     //何もしない
@@ -141,11 +144,11 @@ class StoreSeasonToVideosTable
                 }
             } else {
                 //配列の場合
+                //var_dump('$seasons[0]:');
+                //var_dump($seasons[0]);
                 if ($seasons[0] == "") {
                     //何もしない
                 } elseif ($video->season != $seasons[0]) {    //要検証
-                    //var_dump('$seasons[0]:');
-                    //var_dump($seasons[0]);
                     //元のシーズンが空白 または「シーズン」文字列を含まない場合、DBを更新
                     if (($video->season == "") || (mb_strpos($video->season, "シーズン") === false)) {
                         //DBを更新
@@ -155,7 +158,7 @@ class StoreSeasonToVideosTable
                 }
             }
         }   //$videosループend
-        
+                
         Log::debug('StoreSeasonToVideosTable.php 取り込み 完了!!');
 
     }
