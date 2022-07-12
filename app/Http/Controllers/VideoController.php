@@ -36,7 +36,7 @@ class VideoController extends Controller
     {
         event(new CheckVideosTableSeason());
         return redirect('/videos');
-        
+
         // debug code はここに追加する /////////////////////
         // debug code end ///////////////////////
     }

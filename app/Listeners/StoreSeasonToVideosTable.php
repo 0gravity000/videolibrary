@@ -35,10 +35,18 @@ class StoreSeasonToVideosTable
         $client = new Client();
 
         $videos = Video::all();
-        //$videos = Video::where('id', 1034)->get();
+        //$videos = Video::where('id', 56)->get();
         foreach ($videos as $video) {
             //dd($video);
             $crawler = $client->request('GET', $video->url);
+            //ページの存在チェック
+            $page = $crawler->filter('head > title')->text();
+            //var_dump($page);
+            if ($page == "ページが見つかりません") {
+                continue;
+                //DBから削除する処理を入れたい
+            }
+            
             $seasons_not_listbox = "";
             $seasons_listbox_prime = "";
             $seasons_listbox_not_prime = "";
@@ -148,6 +156,8 @@ class StoreSeasonToVideosTable
                 Log::debug($video->id);
                 Log::debug('$seasons[0]:');
                 Log::debug($seasons[0]);
+                //var_dump('$seasons[0]:');
+                //var_dump($seasons[0]);
                 if ($seasons[0] == "") {
                     //何もしない
                 } elseif ($video->season != $seasons[0]) {    //要検証
