@@ -32,10 +32,12 @@ class StoreSeasonToVideosTable
      */
     public function handle(CheckVideosTableSeason $event)
     {
+        //頻繁に下記のエラーで止まる 原因不明、要調査
+        //Undefined offset: 0 {"exception":"[object] (ErrorException(code: 0): Undefined offset: 0 at /home/zerogravity0/0gravity0.com/public_html/videolibrary/app/Listeners/StoreSeasonToVideosTable.php:127)
         $client = new Client();
 
-        //$videos = Video::all();
-        $videos = Video::where('id', '>', 1137)->get();
+        $videos = Video::all();
+        //$videos = Video::where('id', '>', 3489)->get();
         foreach ($videos as $video) {
             //dd($video);
             $crawler = $client->request('GET', $video->url);

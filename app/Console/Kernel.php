@@ -38,9 +38,11 @@ class Kernel extends ConsoleKernel
         })->dailyAt('4:00');    //毎日4:00に実行する
         */
 
+        /* 必要なときだけコメントをはずす
         $schedule->call(function () {
             event(new CheckVideosTableSeason());
-        })->dailyAt('23:33');    //毎日4:00に実行する
+        })->dailyAt('4:00');    //毎日4:00に実行する
+        */
     }
 
     /**
