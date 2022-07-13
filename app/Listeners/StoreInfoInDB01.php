@@ -32,6 +32,7 @@ class StoreInfoInDB01
      */
     public function handle(DailyCheckAmazonPrimeVideo01 $event)
     {
+        Log::debug('StoreInfoInDB01.php 取り込み 開始!!');
         //
         $client = new Client();
 
