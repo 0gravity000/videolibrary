@@ -134,17 +134,20 @@ class StoreInfoInDB01
                     //#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(13) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div.lAtJLC > div > div:nth-child(4) > div > div:nth-child(2)
                     $years[$idx-1] = $crawler->filter('#av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child('.$idx.')')->each(function ($node) {
                         $tmp = "";
+                        $hit = false;
                         //div:nth-child(1)~(4)分ループ どこかに「年」が格納される確率が高い
-                        for ($i=1; $i < 5; $i++) { 
-                            $isyear = $node->filter('div.lAtJLC > div > div:nth-child(4) > div > div:nth-child('.$i.')')->text();
-                            //「年」のチェック処理 4桁の数値なら年とみなす
-                            if (preg_match('/\d{4}/', $isyear)) {
-                                $tmp = $isyear;
-                                //dd($isyear);
-                                break;
-                            }
+                        for ($i=1; $i < 5; $i++) {
+                            if ($hit === false) {
+                                $isyear = $node->filter('div.lAtJLC > div > div:nth-child(4) > div > div:nth-child('.$i.')')->text();
+                                //「年」のチェック処理 4桁の数値なら年とみなす
+                                if (preg_match('/\d{4}/', $isyear)) {
+                                    $tmp = $isyear;
+                                    //dd($isyear);
+                                    $hit = true;
+                                }
+                            } 
                         }
-                        dd($tmp);
+                        //dd($tmp);
                         return $tmp;
                     });
                 } catch (\Exception $e) {
