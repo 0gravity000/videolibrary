@@ -166,7 +166,7 @@ class StoreInfoInDB01
                 //DBに登録
                 foreach ($titles[$idx-1] as $title) {
                     //videoテーブルに登録
-                    //同一タイトルも同一URLなし
+                    //同一タイトルかつ同一URLなし
                     if (Video::where('title', $title)->where('url', $urls[$idx-1][0])->doesntExist()) {
                         //dd($title);
                         //レコード新規作成 

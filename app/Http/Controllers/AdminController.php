@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Video;
 use App\Category;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -88,11 +89,11 @@ class AdminController extends Controller
     {
         //
         //dd($request);
-        if(Video::where('title', $request->title)->
-            where('season', $request->InputSeason)->exists()) {
-
-            $request->session()->flash('status', '作品は既に登録されています');
-            return redirect('/admin/video');
+        if(Video::where('title', $request->title)
+            ->where('url', $request->InputUrl)
+            ->where('season', $request->InputSeason)->exists()) {
+                $request->session()->flash('status', '作品は既に登録されています');
+                return redirect('/admin/video');
         }
 
         /*
@@ -119,8 +120,10 @@ class AdminController extends Controller
                 DB::table('category_video')->insert(
                     [
                         'category_id' => (int)($request->categories[$idx]),
-                        'video_id' => $video->id
-                    ]
+                        'video_id' => $video->id,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now()
+        ]
                 );
             }
         }
