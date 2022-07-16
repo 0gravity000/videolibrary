@@ -39,5 +39,6 @@ Route::post('/admin/mastercategory/store', 'AdminController@store_mastercategory
 Route::get('/admin/video', 'AdminController@index_video');
 Route::get('/admin/video/create', 'AdminController@create_video');
 Route::get('/admin/video/{id}', 'AdminController@show_video');
+Route::get('/admin/video/destroy/{id}', 'AdminController@destroy_video');
 Route::post('/admin/video/update', 'AdminController@update_video');
 Route::post('/admin/video/store', 'AdminController@store_video');

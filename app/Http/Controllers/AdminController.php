@@ -206,7 +206,8 @@ class AdminController extends Controller
                 DB::table('category_video')->insert(
                     [
                         'category_id' => (int)($request->categories[$idx]),
-                        'video_id' => $video->id
+                        'video_id' => $video->id,
+                        'updated_at' => Carbon::now()
                     ]
                 );
             }
@@ -221,8 +222,13 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy_video($id)
     {
-        //
+        //videoテーブル 対象idのレコードを削除
+        $video = Video::where('id', $id)->delete();
+        //category_videoテーブル 対象video_idのレコードを削除
+        $videos = DB::table('category_video')->where('video_id', $id)->delete();
+
+        return redirect('/admin/video');
     }
 }

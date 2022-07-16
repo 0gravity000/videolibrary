@@ -10,7 +10,10 @@
             <a href="/admin/video/create">新規作成</a>
             <div>
                 @foreach($videos as $video)
-                <a href="/admin/video/{{ $video->id }}">{{ $video->id }}：{{ $video->title }}：{{ $video->season }}</a><br>
+                <a href="/admin/video/{{ $video->id }}">{{ $video->id }}：{{ $video->title }}：{{ $video->season }}</a>
+                &nbsp;&nbsp;
+                <a href="/admin/video/destroy/{{ $video->id }}">削除</a>
+                <br>
                 @endforeach
             </div>
     </div>
