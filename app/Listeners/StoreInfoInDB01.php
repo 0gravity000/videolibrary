@@ -163,37 +163,54 @@ class StoreInfoInDB01
                     $discribes[$idx-1][0] = "";
                 }
 
-                //DBに登録
-                foreach ($titles[$idx-1] as $title) {
-                    //videoテーブルに登録
-                    //同一タイトルかつ同一URLなし
-                    if (Video::where('title', $title)->where('url', $urls[$idx-1][0])->doesntExist()) {
-                        //dd($title);
-                        //レコード新規作成 
-                        $video = new Video;
-                    } else {
-                        //同一タイトルまたは同一URLが存在する場合
-                        //同一タイトルまたは同一URLが存在し、かつ同一シーズンがない
-                        if (Video::where('title', $title)->orwhere('url', $urls[$idx-1][0])->where('season', $seasons[$idx-1][0])->doesntExist()) {
-                            //レコード新規作成 
-                            $video = new Video;
-                            //dd($video);
-                        } else {
-                            //同一タイトルまたは同一URLが存在し、かつ同一シーズンがない
-                            //レコード更新
-                            $video = Video::where('title', $title)->orwhere('url', $urls[$idx-1][0])->where('season', $seasons[$idx-1][0])->first();
-                        }
-                    }
-                    $video->title = $title;
-                    $video->url = "https://amazon.co.jp".$urls[$idx-1][0];
-                    $video->season = $seasons[$idx-1][0];
-                    $video->year = $years[$idx-1][0];
-                    $video->description = $discribes[$idx-1][0];
-                    $video->save();
+                var_dump($urls[$idx-1][0]);
+                //dd(Video::where('url', "https://amazon.co.jp".$urls[$idx-1][0])->count() == 0);
+                //videoテーブル
+                //同一URLが存在するかチェック
+                if (Video::where('url', "https://amazon.co.jp".$urls[$idx-1][0])->count() == 0) {
+                    //同一URLが存在しない場合
+                    $video = new Video;
+                } else {
+                    //同一URLが存在する場合
+                    $video = Video::OrderByDesc('id')->where('url', "https://amazon.co.jp".$urls[$idx-1][0])->first();
+                    //dd($video);
+                }
 
-                    //category_videoテーブルに登録
-                    //video_idなし
-                    if (DB::table('category_video')->where('video_id', $video->id)->doesntExist()) {
+                //DBに登録 videoテーブル
+                $video->title = $titles[$idx-1][0];
+                $video->url = "https://amazon.co.jp".$urls[$idx-1][0];
+                $video->season = $seasons[$idx-1][0];
+                $video->year = $years[$idx-1][0];
+                $video->description = $discribes[$idx-1][0];
+                $video->save();
+
+                //var_dump($urlidx);
+                //var_dump($video->id);
+                //var_dump($video);
+                //dd($video);
+
+                //category_videoテーブルに登録
+                //video_idなしの場合
+                //dd(DB::table('category_video')->where('video_id', $video->id)->doesntExist());
+                if (DB::table('category_video')->where('video_id', $video->id)->doesntExist()) {
+                    //レコード新規作成
+                    DB::table('category_video')->insert(
+                        [
+                            'category_id' => $urlidx,
+                            'video_id' => $video->id,
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now()
+                        ]
+                    );
+                } else {
+                    //video_idありの場合
+                    /*
+                    dd(DB::table('category_video')->where('video_id', $video->id)
+                        ->whereIn('category_id', [$urlidx])->doesntExist());
+                    */
+                    //video_id が同じかつ category_id に現在チェック中のカテゴリが含まれない
+                    if (DB::table('category_video')->where('video_id', $video->id)
+                        ->whereIn('category_id', [$urlidx])->doesntExist()) {
                         //レコード新規作成
                         DB::table('category_video')->insert(
                             [
@@ -203,58 +220,11 @@ class StoreInfoInDB01
                                 'updated_at' => Carbon::now()
                             ]
                         );
-                    } else {
-                        //video_idありの場合
-                        //category_idなし
-                        if (DB::table('category_video')->where('category_id', $urlidx)->doesntExist()) {
-                            //レコード新規作成
-                            DB::table('category_video')->insert(
-                                [
-                                    'category_id' => $urlidx,
-                                    'video_id' => $video->id,
-                                    'created_at' => Carbon::now(),
-                                    'updated_at' => Carbon::now()
-                                ]
-                            );
-                        }
                     }
-
                 }
+                //dd('ループエンド');
             }
         }   //urlループend
-
-        //dd($titles);
-        //dd($seasons);
-        //dd($years);
-        //dd($discribes);
-
-        /*
-        プライムに最近追加された作品　20件?
-        https://www.amazon.co.jp/gp/video/search/ref=atv_cat_jp_recently_added_to_prime_quest?ie=UTF8&pageId=default&queryToken=eyJ0eXBlIjoicXVlcnkiLCJuYXYiOmZhbHNlLCJwdCI6ImJyb3dzZSIsInBpIjoiZGVmYXVsdCIsInNlYyI6ImNlbnRlciIsInN0eXBlIjoic2VhcmNoIiwicXJ5IjoiYmJuPTM5ODUyODkwNTEmc2VhcmNoLWFsaWFzPWluc3RhbnQtdmlkZW8mbm9kZT0zOTg1Mjg5MDUxJnBfbl93YXlzX3RvX3dhdGNoPTM3NDYzMzAwNTEiLCJ0eHQiOiLjg5fjg6njgqTjg6DjgavmnIDov5Hov73liqDjgZXjgozjgZ%2FkvZzlk4EiLCJvZmZzZXQiOjAsIm5wc2kiOjMwfQ%3D%3D&phrase=%E3%83%97%E3%83%A9%E3%82%A4%E3%83%A0%E3%81%AB%E6%9C%80%E8%BF%91%E8%BF%BD%E5%8A%A0%E3%81%95%E3%82%8C%E3%81%9F%E4%BD%9C%E5%93%81&queryPageType=browse
-        タイトル：はたらく細胞!!
-        #av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div._1y15Fl.dvui-beardContainer.D0Lu_p.av-grid-beard > div._1N2P-J.mustache._2mxudr > div._2hMXwV > div.vRplU5 > span > a
-        タイトル：転生したらスライム
-        #av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(2) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div._1y15Fl.dvui-beardContainer.D0Lu_p.av-grid-beard > div._1N2P-J.mustache._2mxudr > div._2hMXwV > div.vRplU5 > span > a
-        
-        シーズン：シーズン2
-        #av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div._1y15Fl.dvui-beardContainer.D0Lu_p.av-grid-beard > div._1N2P-J.mustache._2mxudr > div._2hMXwV > div._27-0OW.dvui-beard-second-line > span > span > span:nth-child(1)
-        年：2021
-        #av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div._1y15Fl.dvui-beardContainer.D0Lu_p.av-grid-beard > div._1N2P-J.mustache._2mxudr > div._2hMXwV > div._27-0OW.dvui-beard-second-line > span > span > span:nth-child(2)
-        
-        もうすぐ配信終了のプライムビデオ
-        https://www.amazon.co.jp/gp/video/search/ref=atv_cat_leaving_soon_quest?phrase=%E3%82%82%E3%81%86%E3%81%99%E3%81%90%E9%85%8D%E4%BF%A1%E7%B5%82%E4%BA%86&queryToken=eyJ0eXBlIjoicXVlcnkiLCJuYXYiOmZhbHNlLCJwdCI6ImJyb3dzZSIsInBpIjoiZGVmYXVsdCIsInNlYyI6ImNlbnRlciIsInN0eXBlIjoic2VhcmNoIiwicXJ5IjoiYmJuPTQyMTc1MjAwNTEmc2VhcmNoLWFsaWFzPWluc3RhbnQtdmlkZW8mbm9kZT00MjE3NTIwMDUxJnBfbl93YXlzX3RvX3dhdGNoPTM3NDYzMzAwNTEiLCJ0eHQiOiLjgoLjgYbjgZnjgZDphY3kv6HntYLkuoYiLCJvZmZzZXQiOjAsIm5wc2kiOjMwfQ%3D%3D&ie=UTF8&pageId=default&queryPageType=browse
-        
-        プライム会員特典で見放題のプライムビデオ
-        タイトル：はたらく細胞!!
-        #av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div._1y15Fl.dvui-beardContainer.D0Lu_p.av-grid-beard > div._1N2P-J.mustache._2mxudr > div._2hMXwV > div.vRplU5 > span > a
-        シーズン：シーズン2
-        #av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div._1y15Fl.dvui-beardContainer.D0Lu_p.av-grid-beard > div._1N2P-J.mustache._2mxudr > div._2hMXwV > div._27-0OW.dvui-beard-second-line > span > span > span:nth-child(1)
-        年：2021
-        #av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div._1y15Fl.dvui-beardContainer.D0Lu_p.av-grid-beard > div._1N2P-J.mustache._2mxudr > div._2hMXwV > div._27-0OW.dvui-beard-second-line > span > span > span:nth-child(2)
-
-        説明
-        #av-search > div > div.X8aBJ_.av-search-grid.av-s-g-clear > div:nth-child(1) > div > div._38SAO3.tst-hover-container._1pYuE7._1aBOAx > div.lAtJLC > div > div:nth-child(3) > div > p
-        */
 
         Log::debug('StoreInfoInDB01.php 取り込み 完了!!');
     }

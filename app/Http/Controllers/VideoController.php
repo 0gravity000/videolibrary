@@ -40,6 +40,18 @@ class VideoController extends Controller
         // debug code はここに追加する /////////////////////
         // debug code end ///////////////////////
     }
+
+    public function check_url_duplication()
+    {
+        $videos = Video::orderBy('id')->get();
+
+        foreach ($videos as $video) {
+
+        }
+
+
+        return redirect('/admin/video');
+    }   
     
     public function index()
     {
