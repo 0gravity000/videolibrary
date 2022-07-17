@@ -44,13 +44,84 @@ class VideoController extends Controller
     public function check_url_duplication()
     {
         $videos = Video::orderBy('id')->get();
+        //$videos = Video::orderBy('id')->where('id', 384)->get();
 
         foreach ($videos as $video) {
+            //videoテーブルに現在チェック中のレコードと同一URLが存在するかチェック
+            //自分自身以外に同一URLが存在するか
+            $duplication_count = Video::orderByDesc('id')->whereIn('url', [$video->url])->count();
+            if ($duplication_count > 1) {
+                //videoテーブルに現在チェック中のレコードと同一URLが存在する場合
+                //最低2レコード存在する
+                $duplications = Video::orderByDesc('id')->whereIn('url', [$video->url])->get();
+                //dd($duplications);
+                //category_videoテーブルの削除するレコードのcategory_idを保持用コレクションの初期化
+                $merged_category_ids = collect([]);
+                $first_duplication_id = "";
+                //$first_duplication = collect();
+                $cnt = 0;
+                //var_dump($merged_category_ids);
+                //重複レコード数分削除する 最初のコレクションは保持しておく
+                foreach ($duplications as $duplication) {
+                    var_dump($duplication->id);
+                    if ($cnt == 0) {
+                        $first_duplication_id = $duplication->id;
+                        //$first_duplication = $duplication->replicate();
+                        //カウンタの加算
+                        $cnt++;
+                        continue;
+                    } 
+                    //videoテーブルの削除するレコードのtitle、season、yearをチェックする。
+                    //保持しておくレコードといずれかが不一致の場合は、削除せず、continueする。
+                    if (($duplication->title == Video::where('id', $first_duplication_id)->first()->title)
+                        && ($duplication->season == Video::where('id', $first_duplication_id)->first()->season)
+                        && ($duplication->year == Video::where('id', $first_duplication_id)->first()->year)) {
+                        //videoテーブルの該当レコードを削除
+                        var_dump('title、season、year一致');
+                        //videoテーブルの削除するレコードのtitle、season、yearをチェックし、
+                        //保持しておくレコードとすべてが一致の場合
+                        var_dump($duplication->categories()->pluck('category_id'));
+                        //category_videoテーブルの削除するレコードのcategory_idを保持用コレクションにマージする
+                        $merged_category_ids = $merged_category_ids->merge($duplication->categories()->pluck('category_id'));
+                        //dd($merged_category_ids);
 
-        }
+                        //videoテーブルの該当レコードを削除
+                        var_dump('videoテーブル 削除');
+                        var_dump($duplication->id);
+                        Video::where('id', $duplication->id)->delete();
 
+                        //category_videoテーブルの該当レコード（video_idが一致するレコード）を削除
+                        DB::table('category_video')->where('video_id', $duplication->id)->delete();
+                    }
+                    //カウンタの加算
+                    $cnt++;
+                }   //$duplicationsループ end
 
-        return redirect('/admin/video');
+                //category_videoテーブルの保持しておくレコードのcategory_idを保持用コレクションにマージする
+                
+                $merged_category_ids = $merged_category_ids->merge(Video::where('id', $first_duplication_id)->first()->categories()->pluck('category_id'));
+                //dd(Video::where('id', $first_duplication_id)->first());
+                var_dump($merged_category_ids);
+                //category_videoテーブルの該当レコード（video_idが一致するレコード）を削除
+                DB::table('category_video')->where('video_id', $first_duplication_id)->delete();
+                //category_videoテーブルにvideo_idと保持用コレクションに格納されたcategory_idのすべてを追加する
+                foreach ($merged_category_ids as $merged_category_id) {
+                    var_dump($merged_category_id);
+                    DB::table('category_video')->insert(
+                        [
+                            'category_id' => $merged_category_id,
+                            'video_id' => $first_duplication_id,
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now()
+                        ]
+                    );
+                }
+
+            }   //if $duplication_count-1 > 1 end
+            //dd('次のvideo');
+        }   //videos ループend
+
+        return redirect('/admin');
     }   
     
     public function index()
