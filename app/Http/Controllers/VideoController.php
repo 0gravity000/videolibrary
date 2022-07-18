@@ -102,14 +102,16 @@ class VideoController extends Controller
                 $merged_category_ids = $merged_category_ids->merge(Video::where('id', $first_duplication_id)->first()->categories()->pluck('category_id'));
                 //dd(Video::where('id', $first_duplication_id)->first());
                 var_dump($merged_category_ids);
+                $uniqued_category_ids = $merged_category_ids->unique();
+                var_dump($uniqued_category_ids);
                 //category_videoテーブルの該当レコード（video_idが一致するレコード）を削除
                 DB::table('category_video')->where('video_id', $first_duplication_id)->delete();
                 //category_videoテーブルにvideo_idと保持用コレクションに格納されたcategory_idのすべてを追加する
-                foreach ($merged_category_ids as $merged_category_id) {
-                    var_dump($merged_category_id);
+                foreach ($uniqued_category_ids as $uniqued_category_id) {
+                    var_dump($uniqued_category_id);
                     DB::table('category_video')->insert(
                         [
-                            'category_id' => $merged_category_id,
+                            'category_id' => $uniqued_category_id,
                             'video_id' => $first_duplication_id,
                             'created_at' => Carbon::now(),
                             'updated_at' => Carbon::now()
