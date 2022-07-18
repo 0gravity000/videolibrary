@@ -178,11 +178,15 @@ class StoreInfoInDB01
 
                 //urlの末尾の不要な部分を削除
                 $pos = mb_strpos($urls[$idx-1][0], "/ref=");
-                //dd($pos);
-                $trim = substr($urls[$idx-1][0], $pos);
-                //dd($trim);
-                $trimed_url = str_replace($trim, '', $urls[$idx-1][0]);
-                //dd($trimed_url);
+                if ($pos !== false) {
+                    //dd($pos);
+                    $trim = substr($urls[$idx-1][0], $pos);
+                    //dd($trim);
+                    $trimed_url = str_replace($trim, '', $urls[$idx-1][0]);
+                    //dd($trimed_url);
+                } else {
+                    $trimed_url = $urls[$idx-1][0];
+                }
 
                 //DBに登録 videoテーブル
                 $video->title = $titles[$idx-1][0];
