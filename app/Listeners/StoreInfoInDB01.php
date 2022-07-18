@@ -189,6 +189,12 @@ class StoreInfoInDB01
                 }
 
                 //DBに登録 videoテーブル
+                //Amazonオリジナルのタイトルの場合、タイトルが空白になるかもしれないので回避処理を追加 要検証
+                if ($titles[$idx-1][0] === "") {
+                    //何もしない
+                } else {
+                    $video->title = $titles[$idx-1][0];
+                }
                 $video->title = $titles[$idx-1][0];
                 $video->url = "https://amazon.co.jp".$trimed_url;
                 $video->season = $seasons[$idx-1][0];
