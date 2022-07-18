@@ -163,19 +163,8 @@ class StoreInfoInDB01
                     $discribes[$idx-1][0] = "";
                 }
 
-                var_dump($urls[$idx-1][0]);
+                //var_dump($urls[$idx-1][0]);
                 //dd(Video::where('url', "https://amazon.co.jp".$urls[$idx-1][0])->count() == 0);
-                //videoテーブル
-                //同一URLが存在するかチェック
-                if (Video::where('url', "https://amazon.co.jp".$urls[$idx-1][0])->count() == 0) {
-                    //同一URLが存在しない場合
-                    $video = new Video;
-                } else {
-                    //同一URLが存在する場合
-                    $video = Video::OrderByDesc('id')->where('url', "https://amazon.co.jp".$urls[$idx-1][0])->first();
-                    //dd($video);
-                }
-
                 //urlの末尾の不要な部分を削除
                 $pos = mb_strpos($urls[$idx-1][0], "/ref=");
                 if ($pos !== false) {
@@ -186,6 +175,17 @@ class StoreInfoInDB01
                     //dd($trimed_url);
                 } else {
                     $trimed_url = $urls[$idx-1][0];
+                }
+
+                //videoテーブル
+                //同一URLが存在するかチェック
+                if (Video::where('url', "https://amazon.co.jp".$trimed_url)->count() == 0) {
+                    //同一URLが存在しない場合
+                    $video = new Video;
+                } else {
+                    //同一URLが存在する場合
+                    $video = Video::OrderByDesc('id')->where('url', "https://amazon.co.jp".$trimed_url)->first();
+                    //dd($video);
                 }
 
                 //DBに登録 videoテーブル
