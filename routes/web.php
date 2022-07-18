@@ -28,6 +28,7 @@ Route::get('/videos/manual_download', 'VideoController@manual_download');
 Route::get('/videos/check_year', 'VideoController@check_year');
 Route::get('/videos/check_season', 'VideoController@check_season');
 Route::get('/videos/check_url_duplication', 'VideoController@check_url_duplication');
+Route::get('/videos/trim_url', 'VideoController@trim_url');
 Route::get('/admin', function () {
     return view('admin');
 });

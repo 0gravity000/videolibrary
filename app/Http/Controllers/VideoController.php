@@ -124,6 +124,24 @@ class VideoController extends Controller
         return redirect('/admin');
     }   
     
+    public function trim_url()
+    {
+        $videos = Video::orderBy('id')->get();
+
+        foreach ($videos as $video) {
+            $pos = mb_strpos($video->url, "/ref=");
+            //dd($pos);
+            $trim = substr($video->url, $pos);
+            //dd($trim);
+            $trimed_url = str_replace($trim, '', $video->url);
+            //dd($trimed_url);
+            $video->url = $trimed_url;
+            $video->save();
+        }
+        return redirect('/admin');
+
+    }
+
     public function index()
     {
         $videos = Video::orderBy('updated_at', 'desc')->paginate(200);

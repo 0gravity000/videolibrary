@@ -176,9 +176,17 @@ class StoreInfoInDB01
                     //dd($video);
                 }
 
+                //urlの末尾の不要な部分を削除
+                $pos = mb_strpos($urls[$idx-1][0], "/ref=");
+                //dd($pos);
+                $trim = substr($urls[$idx-1][0], $pos);
+                //dd($trim);
+                $trimed_url = str_replace($trim, '', $urls[$idx-1][0]);
+                //dd($trimed_url);
+
                 //DBに登録 videoテーブル
                 $video->title = $titles[$idx-1][0];
-                $video->url = "https://amazon.co.jp".$urls[$idx-1][0];
+                $video->url = "https://amazon.co.jp".$trimed_url;
                 $video->season = $seasons[$idx-1][0];
                 $video->year = $years[$idx-1][0];
                 $video->description = $discribes[$idx-1][0];
