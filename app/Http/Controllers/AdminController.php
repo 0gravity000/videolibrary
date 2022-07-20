@@ -89,9 +89,7 @@ class AdminController extends Controller
     {
         //
         //dd($request);
-        if(Video::where('title', $request->title)
-            ->where('url', $request->InputUrl)
-            ->where('season', $request->InputSeason)->exists()) {
+        if(Video::where('url', $request->InputUrl)->exists()) {
                 $request->session()->flash('status', '作品は既に登録されています');
                 return redirect('/admin/video');
         }
@@ -123,7 +121,7 @@ class AdminController extends Controller
                         'video_id' => $video->id,
                         'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now()
-        ]
+                    ]
                 );
             }
         }
@@ -207,6 +205,7 @@ class AdminController extends Controller
                     [
                         'category_id' => (int)($request->categories[$idx]),
                         'video_id' => $video->id,
+                        'created_at' => Carbon::now(),
                         'updated_at' => Carbon::now()
                     ]
                 );
